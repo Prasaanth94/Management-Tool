@@ -1,5 +1,13 @@
 .navBar{
-    height: 50px;
+    height: 4dvh;
     width: 100%;
-    background-color: bisque;
+  
+}
+
+.light{
+    background-color: gray;
+}
+
+.dark{
+    background-color: rgb(68, 72, 80);
 }
