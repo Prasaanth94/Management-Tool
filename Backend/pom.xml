@@ -99,6 +99,17 @@
     <optional>true</optional>
 </dependency>
 
+	 <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version> <!-- Specify version -->
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version> <!-- Specify version -->
+    </dependency>
+
 	</dependencies>
 
 	<build>

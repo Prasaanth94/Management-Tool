@@ -1,37 +1,43 @@
 package com.example.management_tool.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.example.management_tool.config.JwtConfig;
+import com.example.management_tool.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
-@Value("${jwt.secret.access}")
-private String jwtSecretAccess;
+    private final JwtUtil jwtUtil;
+    private final JwtConfig jwtConfig;
 
-@Value("${jwt.secret.refresh}")
-private String jwtSecretRefresh;
+    @Autowired
+    public JwtService(JwtUtil jwtUtil, JwtConfig jwtConfig) {
+        this.jwtUtil = jwtUtil;
+        this.jwtConfig = jwtConfig;
+    }
 
-@Value("${jwt.expiration.access}")
-private int jwtExpirationAccess;
+    public String createAccessToken(String username) {
+        return jwtUtil.generateAccessToken(username);
+    }
 
-@Value("${jwt.expiration.refresh}")
-private int jwtExpirationRefresh;
+    public String createRefreshToken(String username) {
+        return jwtUtil.generateRefreshToken(username);
+    }
 
-public String getJwtSecretAccess() {
-return jwtSecretAccess;
-}
+    public boolean validateAccessToken(String token, String username) {
+        return jwtUtil.validateToken(token, username, jwtConfig.getAccess());
+    }
 
-public String getJwtSecretRefresh() {
-return jwtSecretRefresh;
-}
+    public boolean validateRefreshToken(String token, String username) {
+        return jwtUtil.validateToken(token, username, jwtConfig.getRefresh());
+    }
 
-public int getJwtExpirationAccess() {
-return jwtExpirationAccess;
-}
+    public String extractUsernameFromAccessToken(String token) {
+        return jwtUtil.extractUsername(token, jwtConfig.getAccess());
+    }
 
-public int getJwtExpirationRefresh() {
-return jwtExpirationRefresh;
-}
-
+    public String extractUsernameFromRefreshToken(String token) {
+        return jwtUtil.extractUsername(token, jwtConfig.getRefresh());
+    }
 }
