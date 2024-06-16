@@ -1,9 +1,16 @@
 package com.example.management_tool.model;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
 import javax.validation.constraints.*;
 
 import com.example.management_tool.validation.Alphanumeric;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.logging.Logger;
 
 @Entity
 @Table(name = "users")
@@ -12,7 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long userId;
+    private UUID userId;
 
     @Column(nullable = false)
     @NotBlank(message = "Name is Required")
@@ -22,6 +29,7 @@ public class User {
     @NotBlank(message = "Password hash is required")
     @Size(min = 8, message = " Pasword must be more than 8 characters and alphanumeric ")
     @Alphanumeric(message = "password must be alpahanumeric")
+
     private String hash;
 
     @Column(nullable = false, unique = true)
@@ -44,13 +52,15 @@ public class User {
         this.role = role;
     }
 
+    private static final Logger LOGGER = Logger.getLogger(User.class.getName());
+
     // getters and setters
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
@@ -67,7 +77,9 @@ public class User {
     }
 
     public void setHash(String hash) {
-        this.hash = hash;
+        LOGGER.info("Setting hash for user: " + this.username);
+        this.hash = BCrypt.hashpw(hash, BCrypt.gensalt());
+        LOGGER.info("Hash set successfully.");
     }
 
     public String getUsername() {
