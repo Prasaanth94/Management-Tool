@@ -37,6 +37,11 @@ public class User {
     @Size(min = 5, max = 20, message = "Username must be between 5 and 20 characters")
     private String username;
 
+    // a temporary variable to use in controller to check if roleId is valid in the
+    // Role entity
+    @Column(name = "user_role", insertable = false, updatable = false)
+    private Integer roleId;
+
     @ManyToOne
     @JoinColumn(name = "user_role", nullable = false, referencedColumnName = "id")
     private Role role;
@@ -45,11 +50,11 @@ public class User {
 
     }
 
-    public User(String name, String hash, String username, Role role) {
+    public User(String name, String hash, String username, Integer roleId) {
         this.name = name;
         this.hash = hash;
         this.username = username;
-        this.role = role;
+        this.roleId = roleId;
     }
 
     private static final Logger LOGGER = Logger.getLogger(User.class.getName());
@@ -96,6 +101,14 @@ public class User {
 
     public void setUserRole(Role role) {
         this.role = role;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     /**

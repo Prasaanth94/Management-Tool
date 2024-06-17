@@ -43,9 +43,14 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Fetch the Role from repository based on some identifier (e.g., roleType)
-        Optional<Role> optionalRole = roleRepository.findByRoleType("admin"); // Example: Fetching role by roleType
-                                                                              // "admin"
+        // Ensure roleId is provided
+        Integer roleId = user.getRoleId();
+        if (roleId == null) {
+            return new ResponseEntity<>("Role ID is required", HttpStatus.BAD_REQUEST);
+        }
+
+        // Fetch the Role from repository based on roleId
+        Optional<Role> optionalRole = roleRepository.findById(roleId);
         Role role = optionalRole.orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
         // Set the fetched Role to the User object
