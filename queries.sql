@@ -17,6 +17,7 @@ CREATE TABLE users(
 
 
 SELECT * FROM users;
+DELETE FROM users;
 SELECT * FROM role;
 DELETE * FROM role;
 DROP TABLE users;
