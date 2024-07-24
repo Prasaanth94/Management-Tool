@@ -7,6 +7,7 @@ const validateRegistrationData = [
         min: 8,
         max: 50,
     }),
+    body("hash", "password must be alphanumeric").matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,50}$/),
     body("name", "name is required").not().isEmpty(),
     body("user_role", "user_role is required").not().isEmpty()
 ];
