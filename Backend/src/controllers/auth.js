@@ -80,6 +80,7 @@ const registerUser = async(req, res) =>{
 const login = async(req, res) => {
     const{username, hash} = req.body;
 
+
     if(!username || !hash) {
         return res.status(400).json({status: "error", msg : "Please fill in all fields now"});
     }
@@ -123,4 +124,23 @@ const login = async(req, res) => {
         res.status(500).json({status: "error", msg: "Internal Server Error"});
     }
 }
-module.exports = {registerUser, seedUsers, login};
+
+const refresh = (req, res) => {
+    try{
+        const decoded = jwt.verify(req.body.refresh, process.env.REFRESH_SECRET);
+        const claims = {
+            username: decoded.username,
+            role: decoded.role,
+        };
+
+        const access = jwt.sign(claims, process.env.ACCESS_SECRET, {
+            expiresIn: "20m",
+            jwtid: uuidv4(),
+        });
+        res.json({access});
+    } catch(error){
+        console.error(error.message);
+        res.status(400).json({status: " error", msg : "Refreshing Token Failed"});
+    }
+}
+module.exports = {registerUser, seedUsers, login, refresh};
