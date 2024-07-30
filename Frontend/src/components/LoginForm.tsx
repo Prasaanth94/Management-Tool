@@ -5,6 +5,7 @@ import ThemeContext from '../context/theme';
 import { jwtDecode } from 'jwt-decode';
 import UserContext from '../context/user';
 import useFetch from './hooks/useFetch';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
 
@@ -13,6 +14,7 @@ const LoginForm = () => {
     const passwordRef = useRef<HTMLInputElement>(null);
     const userCtx = useContext(UserContext);
     const fetchData = useFetch();
+    const navigate = useNavigate();
 
     const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -32,6 +34,10 @@ const LoginForm = () => {
                 userCtx?.setAccessToken(access);
                 userCtx?.setRole(decoded.role);
                 userCtx?.setLoggedInId(decoded.loggedInId);
+                console.log("Logged in");
+                console.log(userCtx?.loggedInId);
+                console.log(userCtx?.accessToken);
+                navigate("/HomePage")
             }else {
                 alert(`Error: ${JSON.stringify(res.data)}`);
             }
